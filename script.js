@@ -200,8 +200,8 @@ document.addEventListener('DOMContentLoaded', () => {
         resIca.textContent = formatCurrency(icaAmount);
         resTotal.textContent = formatCurrency(total);
 
-        badgeRete.textContent = retePerc + '%';
-        badgeReteIva.textContent = (reteIvaPerc > 0 ? reteIvaPerc + '%' : '0%') + ' s/IVA';
+        badgeRete.textContent = Math.round(retePerc * 100) / 100 + '%';
+        badgeReteIva.textContent = (reteIvaPerc > 0 ? Math.round(reteIvaPerc * 100) / 100 + '%' : '0%') + ' s/IVA';
 
         if (applyIcaSwitch.checked && icaAmount > 0) {
             badgeIca.classList.remove('hidden');
