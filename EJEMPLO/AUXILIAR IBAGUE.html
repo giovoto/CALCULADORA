@@ -1,0 +1,1635 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Calculadora de Retención - Colombia 2025</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet" />
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Inter', sans-serif;
+      background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+      padding: 20px;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      min-height: 100vh;
+      color: #1d1d1f;
+    }
+
+    .main-container {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 30px;
+      max-width: 900px;
+      width: 100%;
+      margin: 0 auto;
+    }
+
+    .form-container {
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(20px);
+      border-radius: 24px;
+      padding: 32px;
+      box-shadow:
+        0 20px 40px rgba(0, 0, 0, 0.1),
+        0 0 0 1px rgba(255, 255, 255, 0.2);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      animation: containerFadeIn 0.5s ease-out;
+    }
+
+    .result-container {
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(20px);
+      border-radius: 24px;
+      padding: 32px;
+      box-shadow:
+        0 20px 40px rgba(0, 0, 0, 0.1),
+        0 0 0 1px rgba(255, 255, 255, 0.2);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      height: fit-content;
+      position: sticky;
+      top: 20px;
+      animation: containerFadeIn 0.5s ease-out 0.2s both;
+    }
+
+    @keyframes containerFadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(10px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    h2 {
+      text-align: center;
+      margin-bottom: 30px;
+      color: #1d1d1f;
+      font-size: 28px;
+      font-weight: 600;
+      letter-spacing: -0.5px;
+    }
+
+    label {
+      font-weight: 500;
+      margin-top: 20px;
+      margin-bottom: 8px;
+      display: block;
+      color: #1d1d1f;
+      font-size: 15px;
+      letter-spacing: -0.2px;
+    }
+
+    select,
+    input[type="number"],
+    input[type="text"] {
+      width: 100%;
+      padding: 16px 20px;
+      margin-top: 0;
+      border: 1px solid rgba(0, 0, 0, 0.1);
+      border-radius: 12px;
+      font-size: 16px;
+      background: rgba(255, 255, 255, 0.8);
+      backdrop-filter: blur(10px);
+      transition: all 0.3s ease;
+      color: #1d1d1f;
+      font-weight: 400;
+    }
+
+    select:focus,
+    input:focus {
+      border: 1px solid #007AFF;
+      outline: none;
+      background: rgba(255, 255, 255, 0.95);
+      box-shadow: 0 0 0 4px rgba(0, 122, 255, 0.1);
+      transform: translateY(-1px);
+      animation: inputFocus 0.3s ease-out;
+    }
+
+    @keyframes inputFocus {
+      0% {
+        transform: scale(1);
+      }
+
+      50% {
+        transform: scale(1.02) translateY(-1px);
+      }
+
+      100% {
+        transform: scale(1) translateY(-1px);
+      }
+    }
+
+    select:hover,
+    input:hover {
+      border: 1px solid rgba(0, 0, 0, 0.2);
+      background: rgba(255, 255, 255, 0.9);
+    }
+
+    .checkbox-label {
+      display: flex;
+      align-items: center;
+      margin-top: 15px;
+      padding: 12px 16px;
+      background: rgba(255, 255, 255, 0.6);
+      border-radius: 10px;
+      border: 1px solid rgba(0, 0, 0, 0.05);
+      transition: all 0.3s ease;
+    }
+
+    .checkbox-label:hover {
+      background: rgba(255, 255, 255, 0.8);
+      border: 1px solid rgba(0, 0, 0, 0.1);
+    }
+
+    .checkbox-label input {
+      width: 18px;
+      height: 18px;
+      margin-right: 12px;
+      accent-color: #007AFF;
+    }
+
+    .checkbox-label label {
+      margin: 0;
+      font-size: 15px;
+      font-weight: 400;
+      color: #1d1d1f;
+    }
+
+    button {
+      background: linear-gradient(135deg, #007AFF 0%, #0051D5 100%);
+      color: white;
+      border: none;
+      padding: 18px 24px;
+      font-size: 17px;
+      width: 100%;
+      border-radius: 14px;
+      margin-top: 30px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-weight: 600;
+      box-shadow:
+        0 8px 20px rgba(0, 122, 255, 0.3),
+        0 0 0 1px rgba(255, 255, 255, 0.1);
+      letter-spacing: -0.2px;
+      backdrop-filter: blur(10px);
+    }
+
+    button:hover {
+      background: linear-gradient(135deg, #0051D5 0%, #003D99 100%);
+      box-shadow:
+        0 12px 28px rgba(0, 122, 255, 0.4),
+        0 0 0 1px rgba(255, 255, 255, 0.2);
+      transform: translateY(-2px);
+    }
+
+    button:active {
+      transform: translateY(0);
+      box-shadow:
+        0 4px 12px rgba(0, 122, 255, 0.3),
+        0 0 0 1px rgba(255, 255, 255, 0.1);
+    }
+
+    #btn-limpiar {
+      background: linear-gradient(135deg, #8E8E93 0%, #6D6D70 100%) !important;
+      margin-top: 12px !important;
+      box-shadow:
+        0 8px 20px rgba(142, 142, 147, 0.3),
+        0 0 0 1px rgba(255, 255, 255, 0.1) !important;
+    }
+
+    #btn-limpiar:hover {
+      background: linear-gradient(135deg, #6D6D70 0%, #48484A 100%) !important;
+      box-shadow:
+        0 12px 28px rgba(142, 142, 147, 0.4),
+        0 0 0 1px rgba(255, 255, 255, 0.2) !important;
+    }
+
+    #resultado {
+      background: rgba(248, 249, 250, 0.8);
+      backdrop-filter: blur(10px);
+      padding: 24px;
+      border-radius: 16px;
+      border-left: 4px solid #007AFF;
+      margin-top: 0;
+      height: fit-content;
+      display: none;
+      box-shadow: 0 8px 24px rgba(0, 122, 255, 0.1);
+      animation: resultFadeIn 0.6s ease-out;
+    }
+
+    #resultado[style*="display: block"] {
+      animation: resultFadeIn 0.6s ease-out;
+    }
+
+    @keyframes resultFadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(20px) scale(0.95);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+    }
+
+    #resultado p {
+      margin: 8px 0;
+      font-size: 15px;
+      word-wrap: break-word;
+    }
+
+    .valor-grande {
+      font-size: 22px;
+      font-weight: bold;
+      color: #000;
+      margin-top: 20px;
+    }
+
+    .valor-suave {
+      color: #888;
+    }
+
+    #ica-container {
+      display: none;
+    }
+
+    #declarante-container {
+      display: none;
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+      body {
+        padding: 10px;
+      }
+
+      .main-container {
+        grid-template-columns: 1fr;
+        gap: 20px;
+        max-width: 100%;
+      }
+
+      .form-container,
+      .result-container {
+        padding: 24px;
+        border-radius: 20px;
+      }
+
+      h2 {
+        font-size: 24px;
+        margin-bottom: 24px;
+      }
+
+      label {
+        font-size: 14px;
+        margin-top: 16px;
+      }
+
+      select,
+      input[type="number"],
+      input[type="text"] {
+        padding: 14px 16px;
+        font-size: 15px;
+      }
+
+      button {
+        padding: 16px 20px;
+        font-size: 16px;
+        margin-top: 24px;
+      }
+    }
+
+    /* Mejoras de UX */
+    .form-section {
+      margin-bottom: 24px;
+    }
+
+    .form-section:last-child {
+      margin-bottom: 0;
+    }
+
+    .section-title {
+      font-size: 18px;
+      font-weight: 600;
+      color: #1d1d1f;
+      margin-bottom: 16px;
+      padding-bottom: 8px;
+      border-bottom: 2px solid rgba(0, 122, 255, 0.1);
+    }
+
+    /* Sistema de preguntas */
+    .progress-container {
+      margin-bottom: 30px;
+    }
+
+    .progress-bar {
+      width: 100%;
+      height: 8px;
+      background: rgba(0, 0, 0, 0.1);
+      border-radius: 4px;
+      overflow: hidden;
+      margin-bottom: 8px;
+    }
+
+    .progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #007AFF 0%, #0051D5 100%);
+      border-radius: 4px;
+      transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+      width: 12.5%;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .progress-fill::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(90deg,
+          transparent,
+          rgba(255, 255, 255, 0.3),
+          transparent);
+      animation: progressShine 2s infinite;
+    }
+
+    @keyframes progressShine {
+      0% {
+        transform: translateX(-100%);
+      }
+
+      100% {
+        transform: translateX(100%);
+      }
+    }
+
+    .progress-text {
+      text-align: center;
+      font-size: 14px;
+      color: #666;
+      font-weight: 500;
+    }
+
+    .question-card {
+      background: rgba(255, 255, 255, 0.8);
+      backdrop-filter: blur(10px);
+      border-radius: 16px;
+      padding: 24px;
+      margin-bottom: 20px;
+      border: 1px solid rgba(0, 0, 0, 0.05);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+      display: none;
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1),
+        transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      position: absolute;
+      width: 100%;
+      top: 0;
+      left: 0;
+    }
+
+    .question-card.active {
+      display: block;
+      position: relative;
+      opacity: 1;
+      transform: translateY(0);
+      animation: slideInUp 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    @keyframes slideInUp {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .question-title {
+      font-size: 20px;
+      font-weight: 600;
+      color: #1d1d1f;
+      margin-bottom: 16px;
+      line-height: 1.3;
+      animation: fadeInDown 0.5s ease-out 0.1s both;
+    }
+
+    .question-subtitle {
+      font-size: 14px;
+      color: #666;
+      margin-bottom: 20px;
+      line-height: 1.4;
+      animation: fadeInDown 0.5s ease-out 0.2s both;
+    }
+
+    @keyframes fadeInDown {
+      from {
+        opacity: 0;
+        transform: translateY(-10px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .options-container {
+      display: grid;
+      gap: 12px;
+    }
+
+    .option-button {
+      background: rgba(255, 255, 255, 0.9);
+      border: 2px solid rgba(0, 0, 0, 0.1);
+      border-radius: 12px;
+      padding: 16px 20px;
+      cursor: pointer;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      text-align: left;
+      font-size: 15px;
+      font-weight: 500;
+      color: #1d1d1f;
+      position: relative;
+      overflow: hidden;
+      animation: slideInRight 0.4s ease-out both;
+    }
+
+    .option-button::before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 0;
+      height: 0;
+      border-radius: 50%;
+      background: rgba(0, 122, 255, 0.1);
+      transform: translate(-50%, -50%);
+      transition: width 0.6s ease, height 0.6s ease;
+    }
+
+    .option-button:hover {
+      border-color: #007AFF;
+      background: rgba(0, 122, 255, 0.05);
+      transform: translateY(-2px) scale(1.02);
+      box-shadow: 0 4px 12px rgba(0, 122, 255, 0.15);
+    }
+
+    .option-button:hover::before {
+      width: 300px;
+      height: 300px;
+    }
+
+    .option-button.selected {
+      border-color: #007AFF;
+      background: rgba(0, 122, 255, 0.1);
+      color: #007AFF;
+      transform: scale(1.02);
+      box-shadow: 0 4px 16px rgba(0, 122, 255, 0.2);
+      animation: selectedPulse 0.4s ease-out;
+    }
+
+    @keyframes slideInRight {
+      from {
+        opacity: 0;
+        transform: translateX(-20px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateX(0);
+      }
+    }
+
+    @keyframes selectedPulse {
+      0% {
+        transform: scale(1);
+      }
+
+      50% {
+        transform: scale(1.05);
+      }
+
+      100% {
+        transform: scale(1.02);
+      }
+    }
+
+    .navigation-buttons {
+      display: flex;
+      gap: 12px;
+      margin-top: 24px;
+    }
+
+    .nav-button {
+      flex: 1;
+      padding: 14px 20px;
+      border: none;
+      border-radius: 12px;
+      font-size: 15px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .nav-button::after {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 0;
+      height: 0;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.3);
+      transform: translate(-50%, -50%);
+      transition: width 0.6s ease, height 0.6s ease;
+    }
+
+    .nav-button:active::after {
+      width: 300px;
+      height: 300px;
+    }
+
+    .nav-button.prev {
+      background: rgba(142, 142, 147, 0.1);
+      color: #8E8E93;
+    }
+
+    .nav-button.prev:hover:not(:disabled) {
+      background: rgba(142, 142, 147, 0.2);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(142, 142, 147, 0.2);
+    }
+
+    .nav-button.next {
+      background: linear-gradient(135deg, #007AFF 0%, #0051D5 100%);
+      color: white;
+      box-shadow: 0 4px 12px rgba(0, 122, 255, 0.3);
+    }
+
+    .nav-button.next:hover:not(:disabled) {
+      background: linear-gradient(135deg, #0051D5 0%, #003D99 100%);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(0, 122, 255, 0.4);
+    }
+
+    .nav-button:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      transform: none !important;
+      box-shadow: none !important;
+    }
+
+    /* Animación para opciones con delay escalonado */
+    .options-container .option-button:nth-child(1) {
+      animation-delay: 0.1s;
+    }
+
+    .options-container .option-button:nth-child(2) {
+      animation-delay: 0.15s;
+    }
+
+    .options-container .option-button:nth-child(3) {
+      animation-delay: 0.2s;
+    }
+
+    .options-container .option-button:nth-child(4) {
+      animation-delay: 0.25s;
+    }
+
+    .options-container .option-button:nth-child(5) {
+      animation-delay: 0.3s;
+    }
+
+    .options-container .option-button:nth-child(6) {
+      animation-delay: 0.35s;
+    }
+
+    .options-container .option-button:nth-child(7) {
+      animation-delay: 0.4s;
+    }
+
+    .options-container .option-button:nth-child(8) {
+      animation-delay: 0.45s;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="main-container">
+    <div class="form-container">
+      <h2>🤖 Asistente de Retenciones 2025</h2>
+      <p style="text-align: center; color: #666; font-size: 14px; margin-bottom: 24px;">
+        💬 <strong>Te guiaré paso a paso:</strong> Solo responde las preguntas y yo calcularé todo
+      </p>
+
+      <!-- Progreso -->
+      <div class="progress-container">
+        <div class="progress-bar">
+          <div class="progress-fill" id="progressFill"></div>
+        </div>
+        <div class="progress-text" id="progressText">Pregunta 1 de 8</div>
+      </div>
+
+      <!-- Contenedor de preguntas -->
+      <div class="questions-container" id="questionsContainer" style="position: relative; min-height: 400px;">
+
+        <!-- Pregunta 1: ¿Quién compra? -->
+        <div class="question-card active" data-question="1">
+          <div class="question-title">💰 ¿Quién está comprando?</div>
+          <div class="question-subtitle">Necesito saber si quien compra es una empresa o una persona individual</div>
+          <div class="options-container">
+            <button class="option-button" data-value="persona_juridica">
+              🏢 <strong>Empresa/Compañía</strong><br>
+              <small>Persona jurídica (S.A.S, S.A., Ltda, etc.)</small>
+            </button>
+            <button class="option-button" data-value="persona_natural">
+              👤 <strong>Persona individual</strong><br>
+              <small>Persona natural (particular, independiente, etc.)</small>
+            </button>
+          </div>
+        </div>
+
+        <!-- Pregunta 2: ¿Quién vende? -->
+        <div class="question-card" data-question="2">
+          <div class="question-title">🛒 ¿Quién está vendiendo?</div>
+          <div class="question-subtitle">Ahora necesito saber si quien vende es una empresa o una persona individual
+          </div>
+          <div class="options-container">
+            <button class="option-button" data-value="persona_juridica">
+              🏢 <strong>Empresa/Compañía</strong><br>
+              <small>Persona jurídica (S.A.S, S.A., Ltda, etc.)</small>
+            </button>
+            <button class="option-button" data-value="persona_natural">
+              👤 <strong>Persona individual</strong><br>
+              <small>Persona natural (particular, independiente, etc.)</small>
+            </button>
+          </div>
+        </div>
+
+        <!-- Pregunta 3: Tipo de empresa vendedora -->
+        <div class="question-card" data-question="3">
+          <div class="question-title">🏷️ ¿Qué tipo de empresa es quien vende?</div>
+          <div class="question-subtitle">Esto me ayuda a saber qué responsabilidades fiscales tiene</div>
+          <div class="options-container" id="responsabilidadesOptions">
+            <!-- Se llenará dinámicamente -->
+          </div>
+        </div>
+
+        <!-- Pregunta 4: ¿Es declarante? -->
+        <div class="question-card" data-question="4" id="declaranteQuestion" style="display: none;">
+          <div class="question-title">📋 ¿La persona declara impuesto de renta?</div>
+          <div class="question-subtitle">Esto afecta las tarifas de retención que se aplicarán</div>
+          <div class="options-container">
+            <button class="option-button" data-value="declarante">
+              ✅ <strong>Sí declara</strong><br>
+              <small>La persona presenta declaración de renta</small>
+            </button>
+            <button class="option-button" data-value="no_declarante">
+              ❌ <strong>No declara</strong><br>
+              <small>La persona NO presenta declaración de renta</small>
+            </button>
+          </div>
+        </div>
+
+        <!-- Pregunta 5: Valor de la operación -->
+        <div class="question-card" data-question="5">
+          <div class="question-title">💰 ¿Cuál es el valor de la operación?</div>
+          <div class="question-subtitle">Ingresa el valor sin IVA (el valor base de la operación)</div>
+          <div class="options-container">
+            <input type="number" id="valorOperacion" placeholder="Ej: 1000000"
+              style="width: 100%; padding: 16px; border: 2px solid rgba(0,0,0,0.1); border-radius: 12px; font-size: 16px;" />
+          </div>
+        </div>
+
+        <!-- Pregunta 6: Tipo de operación -->
+        <div class="question-card" data-question="6">
+          <div class="question-title">📋 ¿Qué tipo de operación es?</div>
+          <div class="question-subtitle">Selecciona la categoría que mejor describe tu operación</div>
+          <div class="options-container">
+            <button class="option-button" data-value="compras">
+              🛒 <strong>Compras de bienes/productos</strong><br>
+              <small>Compra de mercancías, suministros, materiales, etc.</small>
+            </button>
+            <button class="option-button" data-value="servicios">
+              🔧 <strong>Servicios generales</strong><br>
+              <small>Consultoría, mantenimiento, servicios varios</small>
+            </button>
+            <button class="option-button" data-value="transporte">
+              🚛 <strong>Servicios de transporte</strong><br>
+              <small>Transporte de carga, pasajeros, etc.</small>
+            </button>
+            <button class="option-button" data-value="arrendamientos">
+              🏢 <strong>Arrendamientos</strong><br>
+              <small>Arriendo de inmuebles, equipos, etc.</small>
+            </button>
+            <button class="option-button" data-value="honorarios">
+              💼 <strong>Honorarios y comisiones</strong><br>
+              <small>Pagos por servicios profesionales</small>
+            </button>
+            <button class="option-button" data-value="financieros">
+              🏦 <strong>Servicios financieros</strong><br>
+              <small>Intereses, rendimientos financieros</small>
+            </button>
+            <button class="option-button" data-value="construccion">
+              🏗️ <strong>Construcción</strong><br>
+              <small>Contratos de construcción y urbanización</small>
+            </button>
+            <button class="option-button" data-value="otros">
+              📋 <strong>Otros conceptos</strong><br>
+              <small>Otras operaciones no clasificadas</small>
+            </button>
+          </div>
+        </div>
+
+        <!-- Pregunta 7: Subconcepto específico -->
+        <div class="question-card" data-question="7" id="subconceptoQuestion" style="display: none;">
+          <div class="question-title">📝 ¿Cuál es el concepto específico?</div>
+          <div class="question-subtitle">Ahora selecciona el concepto más específico de tu operación</div>
+          <div class="options-container" id="subconceptoOptions">
+            <!-- Se llenará dinámicamente -->
+          </div>
+        </div>
+
+        <!-- Pregunta 8: IVA -->
+        <div class="question-card" data-question="8">
+          <div class="question-title">💸 ¿Qué IVA aplica a esta operación?</div>
+          <div class="question-subtitle">Selecciona la tarifa de IVA que corresponde</div>
+          <div class="options-container">
+            <button class="option-button" data-value="0.05">
+              🟢 <strong>IVA 5%</strong><br>
+              <small>Alimentos básicos, medicamentos, etc.</small>
+            </button>
+            <button class="option-button" data-value="0.19">
+              🔴 <strong>IVA 19%</strong><br>
+              <small>Productos y servicios normales</small>
+            </button>
+            <button class="option-button" data-value="exento">
+              ⚪ <strong>Exento de IVA</strong><br>
+              <small>Operaciones exentas según la ley</small>
+            </button>
+            <button class="option-button" data-value="excluido">
+              ⚫ <strong>Excluido de IVA</strong><br>
+              <small>Operaciones excluidas del IVA</small>
+            </button>
+          </div>
+        </div>
+
+        <!-- Pregunta 9: Ubicación -->
+        <div class="question-card" data-question="9">
+          <div class="question-title">🏙️ ¿La operación se realiza en Ibagué?</div>
+          <div class="question-subtitle">Esto determina si aplica el ICA de Ibagué</div>
+          <div class="options-container">
+            <button class="option-button" data-value="si">
+              ✅ <strong>Sí, en Ibagué</strong><br>
+              <small>La operación se realiza en Ibagué, Tolima</small>
+            </button>
+            <button class="option-button" data-value="no">
+              ❌ <strong>No, en otra ciudad</strong><br>
+              <small>La operación se realiza fuera de Ibagué</small>
+            </button>
+          </div>
+        </div>
+
+        <!-- Pregunta 10: ICA Ibagué -->
+        <div class="question-card" data-question="10" id="icaQuestion" style="display: none;">
+          <div class="question-title">🏛️ ¿Cuál es el tipo de actividad para ICA Ibagué?</div>
+          <div class="question-subtitle">Selecciona el tipo de actividad económica según tarifas de Ibagué</div>
+          <div class="options-container">
+            <button class="option-button" data-value="5.5">
+              🏪 <strong>Comercio al por menor</strong><br>
+              <small>Tiendas, almacenes, ventas al detalle (5.5‰)</small>
+            </button>
+            <button class="option-button" data-value="5.0">
+              🏭 <strong>Industria manufacturera</strong><br>
+              <small>Fabricación, producción industrial (5.0‰)</small>
+            </button>
+            <button class="option-button" data-value="6.0">
+              🏢 <strong>Servicios profesionales</strong><br>
+              <small>Consultoría, servicios técnicos (6.0‰)</small>
+            </button>
+            <button class="option-button" data-value="7.0">
+              🍽️ <strong>Restaurantes y hoteles</strong><br>
+              <small>Servicios de alimentación y hospedaje (7.0‰)</small>
+            </button>
+            <button class="option-button" data-value="6.5">
+              🚛 <strong>Transporte</strong><br>
+              <small>Servicios de transporte terrestre (6.5‰)</small>
+            </button>
+            <button class="option-button" data-value="7.5">
+              🏗️ <strong>Construcción</strong><br>
+              <small>Obras civiles, construcción (7.5‰)</small>
+            </button>
+          </div>
+        </div>
+
+        <!-- Botones de navegación -->
+        <div class="navigation-buttons">
+          <button class="nav-button prev" id="prevBtn" disabled>← Anterior</button>
+          <button class="nav-button next" id="nextBtn" disabled>Siguiente →</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="result-container">
+      <h3 style="text-align: center; margin-bottom: 20px; color: #1d1d1f; font-size: 20px; font-weight: 600;">
+        📊 Resultados
+      </h3>
+      <div id="resultado"></div>
+    </div>
+  </div>
+
+  <script>
+    // Sistema de preguntas paso a paso
+    let currentQuestion = 1;
+    const totalQuestions = 10;
+    let answers = {};
+
+    const tablaRetencion = {
+      // COMPRAS
+      compras_generales: {
+        declarante: { base: 498000, tarifa: 0.025 },
+        no_declarante: { base: 498000, tarifa: 0.035 }
+      },
+      compras_tarjeta: { base: 0, tarifa: 0.015 },
+      compras_agricolas_sin_procesamiento: { base: 3486000, tarifa: 0.015 },
+      compras_agricolas_con_procesamiento: {
+        declarante: { base: 498000, tarifa: 0.025 },
+        no_declarante: { base: 498000, tarifa: 0.035 }
+      },
+      compras_cafe: { base: 3486000, tarifa: 0.005 },
+      compras_combustibles: { base: 0, tarifa: 0.001 },
+      compras_vehiculos: { base: 0, tarifa: 0.01 },
+      compras_oro: { base: 0, tarifa: 0.025 },
+      compras_vivienda_hasta_10000uvt: { base: 0, tarifa: 0.01 },
+      compras_vivienda_exceso_10000uvt: { base: 497990000, tarifa: 0.025 },
+      compras_bienes_raices_no_vivienda: { base: 0, tarifa: 0.025 },
+
+      // SERVICIOS
+      servicios_generales: {
+        declarante: { base: 100000, tarifa: 0.04 },
+        no_declarante: { base: 100000, tarifa: 0.06 }
+      },
+      emolumentos_eclesiasticos: {
+        declarante: { base: 498000, tarifa: 0.04 },
+        no_declarante: { base: 498000, tarifa: 0.035 }
+      },
+      transporte_carga: { base: 100000, tarifa: 0.01 },
+      transporte_pasajeros_terrestre: {
+        declarante: { base: 498000, tarifa: 0.035 },
+        no_declarante: { base: 498000, tarifa: 0.035 }
+      },
+      transporte_pasajeros_aereo_maritimo: { base: 100000, tarifa: 0.01 },
+      servicios_temporales: { base: 100000, tarifa: 0.01 },
+      servicios_vigilancia_aseo: { base: 100000, tarifa: 0.02 },
+      servicios_salud_ips: { base: 100000, tarifa: 0.02 },
+      servicios_hoteles_restaurantes: {
+        declarante: { base: 100000, tarifa: 0.035 },
+        no_declarante: { base: 100000, tarifa: 0.035 }
+      },
+      servicios_software: { base: 0, tarifa: 0.035 },
+
+      // ARRENDAMIENTOS
+      arrendamiento_muebles: { base: 0, tarifa: 0.04 },
+      arrendamiento_inmuebles: {
+        declarante: { base: 498000, tarifa: 0.035 },
+        no_declarante: { base: 498000, tarifa: 0.035 }
+      },
+
+      // HONORARIOS Y COMISIONES
+      honorarios_juridica: { base: 0, tarifa: 0.11 },
+      honorarios_natural: {
+        declarante: { base: 0, tarifa: 0.11 },
+        no_declarante: { base: 0, tarifa: 0.10 }
+      },
+
+      // FINANCIEROS
+      intereses_financieros: { base: 0, tarifa: 0.07 },
+      rendimientos_renta_fija: { base: 0, tarifa: 0.04 },
+
+      // JUEGOS Y APUESTAS
+      loterias_rifas: { base: 2390000, tarifa: 0.20 },
+      juegos_suerte_azar: { base: 249000, tarifa: 0.03 },
+
+      // CONSTRUCCION
+      contratos_construccion: { base: 498000, tarifa: 0.02 },
+
+      // OTROS
+      otros_ingresos: {
+        declarante: { base: 498000, tarifa: 0.025 },
+        no_declarante: { base: 498000, tarifa: 0.035 }
+      },
+      enajenacion_activos_fijos: { base: 0, tarifa: 0.01 }
+    };
+
+    // Definición de subconceptos por categoría principal
+    const subconceptosPorCategoria = {
+      compras: [
+        { value: 'compras_generales', label: '📦 Compras normales de productos/suministros' },
+        { value: 'compras_tarjeta', label: '💳 Compras pagadas con tarjeta' },
+        { value: 'compras_agricolas_sin_procesamiento', label: '🌾 Compras de productos agrícolas frescos' },
+        { value: 'compras_agricolas_con_procesamiento', label: '🏭 Compras de productos agrícolas procesados' },
+        { value: 'compras_cafe', label: '☕ Compras de café (pregamino o cereza)' },
+        { value: 'compras_combustibles', label: '⛽ Compras de gasolina, diésel, etc.' },
+        { value: 'compras_vehiculos', label: '🚗 Compras de carros, motos, etc.' },
+        { value: 'compras_oro', label: '🥇 Compras de oro (empresas comerciales)' },
+        { value: 'compras_vivienda_hasta_10000uvt', label: '🏠 Compra casa para vivir (hasta $498 millones)' },
+        { value: 'compras_vivienda_exceso_10000uvt', label: '🏘️ Compra casa para vivir (más de $498 millones)' },
+        { value: 'compras_bienes_raices_no_vivienda', label: '🏢 Compra terrenos/oficinas (no para vivir)' }
+      ],
+      servicios: [
+        { value: 'servicios_generales', label: '🛠️ Servicios varios (consultoría, mantenimiento, etc.)' },
+        { value: 'emolumentos_eclesiasticos', label: '⛪ Pagos a iglesias o entidades religiosas' },
+        { value: 'servicios_temporales', label: '👥 Servicios de personal temporal' },
+        { value: 'servicios_vigilancia_aseo', label: '🛡️ Servicios de seguridad y limpieza' },
+        { value: 'servicios_salud_ips', label: '🏥 Servicios médicos (hospitales, clínicas)' },
+        { value: 'servicios_hoteles_restaurantes', label: '🍽️ Servicios de hoteles y restaurantes' },
+        { value: 'servicios_software', label: '💻 Licencias de programas de computador' },
+        { value: 'otros_ingresos', label: '📋 Otros ingresos varios' }
+      ],
+      transporte: [
+        { value: 'transporte_carga', label: '🚚 Transporte de mercancías' },
+        { value: 'transporte_pasajeros_terrestre', label: '🚌 Transporte de pasajeros por carretera' },
+        { value: 'transporte_pasajeros_aereo_maritimo', label: '✈️ Transporte de pasajeros por avión/barco' }
+      ],
+      arrendamientos: [
+        { value: 'arrendamiento_inmuebles', label: '🏠 Arriendo de casas, oficinas, locales' },
+        { value: 'arrendamiento_muebles', label: '🪑 Arriendo de equipos, muebles, maquinaria' }
+      ],
+      honorarios: [
+        { value: 'honorarios_juridica', label: '🏢 Honorarios pagados a empresas' },
+        { value: 'honorarios_natural', label: '👤 Honorarios pagados a personas' }
+      ],
+      financieros: [
+        { value: 'intereses_financieros', label: '💰 Intereses de préstamos, inversiones' },
+        { value: 'rendimientos_renta_fija', label: '📈 Rendimientos de bonos, CDT' }
+      ],
+      juegos: [
+        { value: 'loterias_rifas', label: '🎲 Loterías, rifas, apuestas' },
+        { value: 'juegos_suerte_azar', label: '🎰 Juegos de suerte y azar' }
+      ],
+      construccion: [
+        { value: 'contratos_construccion', label: '🏗️ Contratos de construcción y urbanización' }
+      ],
+      otros: [
+        { value: 'otros_ingresos', label: '📋 Otros ingresos varios' },
+        { value: 'enajenacion_activos_fijos', label: '🏭 Venta de activos fijos' }
+      ]
+    };
+
+    const conceptosConDeclarantes = [
+      'compras_generales',
+      'compras_agricolas_con_procesamiento',
+      'servicios_generales',
+      'emolumentos_eclesiasticos',
+      'transporte_pasajeros_terrestre',
+      'servicios_hoteles_restaurantes',
+      'honorarios_natural',
+      'arrendamiento_inmuebles',
+      'otros_ingresos'
+    ];
+
+    // Elementos del DOM
+    const progressFill = document.getElementById('progressFill');
+    const progressText = document.getElementById('progressText');
+    const prevBtn = document.getElementById('prevBtn');
+    const nextBtn = document.getElementById('nextBtn');
+    const questionsContainer = document.getElementById('questionsContainer');
+    const resultado = document.getElementById('resultado');
+
+    // Código obsoleto eliminado - ahora se maneja con el sistema de preguntas
+
+    // Código del formulario obsoleto eliminado - ahora se usa el sistema de preguntas
+
+    // Funciones del sistema de preguntas
+    function updateProgress() {
+      const progress = (currentQuestion / totalQuestions) * 100;
+      progressFill.style.width = progress + '%';
+      progressText.textContent = `Pregunta ${currentQuestion} de ${totalQuestions}`;
+    }
+
+    function showQuestion(questionNumber) {
+      // Ocultar todas las preguntas
+      document.querySelectorAll('.question-card').forEach(card => {
+        card.classList.remove('active');
+      });
+
+      // Manejar preguntas condicionales
+      const declaranteCard = document.getElementById('declaranteQuestion');
+      if (declaranteCard) {
+        if (questionNumber === 4) {
+          declaranteCard.style.display = answers.quienVende === 'persona_natural' ? 'block' : 'none';
+        } else {
+          declaranteCard.style.display = answers.quienVende === 'persona_natural' ? 'block' : 'none';
+        }
+      }
+
+      const subconceptoCard = document.getElementById('subconceptoQuestion');
+      if (subconceptoCard) {
+        if (questionNumber === 7) {
+          // Mostrar pregunta 7 solo si hay concepto principal
+          if (answers.conceptoPrincipal) {
+            subconceptoCard.style.display = 'block';
+          } else {
+            subconceptoCard.style.display = 'none';
+          }
+        } else {
+          // Mantener visible si hay concepto principal
+          subconceptoCard.style.display = answers.conceptoPrincipal ? 'block' : 'none';
+        }
+      }
+
+      const icaCard = document.getElementById('icaQuestion');
+      if (icaCard) {
+        if (questionNumber === 10) {
+          icaCard.style.display = answers.ibague === true ? 'block' : 'none';
+        } else {
+          icaCard.style.display = answers.ibague === true ? 'block' : 'none';
+        }
+      }
+
+      // Mostrar la pregunta actual
+      const currentCard = document.querySelector(`[data-question="${questionNumber}"]`);
+      if (!currentCard) {
+        // Si no existe la pregunta, calcular resultados
+        calcularResultados();
+        return;
+      }
+
+      // Asegurarse de que la pregunta esté visible antes de activarla
+      if (currentCard.id === 'subconceptoQuestion' && !answers.conceptoPrincipal) {
+        // No mostrar si no hay concepto principal, saltar a siguiente
+        const nextValid = getNextValidQuestion(questionNumber);
+        if (nextValid) {
+          currentQuestion = nextValid;
+          showQuestion(currentQuestion);
+        } else {
+          calcularResultados();
+        }
+        return;
+      }
+      if (currentCard.id === 'declaranteQuestion' && answers.quienVende !== 'persona_natural') {
+        // No mostrar si no es persona natural, saltar a siguiente
+        const nextValid = getNextValidQuestion(questionNumber);
+        if (nextValid) {
+          currentQuestion = nextValid;
+          showQuestion(currentQuestion);
+        } else {
+          calcularResultados();
+        }
+        return;
+      }
+      if (currentCard.id === 'icaQuestion' && !answers.ibague) {
+        // No mostrar si no es Ibagué, calcular resultados
+        calcularResultados();
+        return;
+      }
+
+      // Si llegamos aquí, mostrar la pregunta
+      currentCard.classList.add('active');
+
+      // Actualizar botones de navegación
+      prevBtn.disabled = questionNumber === 1;
+
+      // Verificar si la pregunta actual tiene respuesta válida
+      const hasValidAnswer = hasAnswer(questionNumber);
+      nextBtn.disabled = !hasValidAnswer;
+
+      // Determinar si es la última pregunta válida
+      const nextValid = getNextValidQuestion(questionNumber);
+      const isLastQuestion = nextValid === null;
+
+      // Cambiar texto del botón siguiente en la última pregunta
+      if (isLastQuestion) {
+        nextBtn.textContent = '🧮 Calcular';
+      } else {
+        nextBtn.textContent = 'Siguiente →';
+      }
+
+      updateProgress();
+    }
+
+    function hasAnswer(questionNumber) {
+      // Verificar respuestas específicas por pregunta
+      if (questionNumber === 5) {
+        return !!answers.valor && answers.valor > 0;
+      }
+      if (questionNumber === 4) {
+        // Pregunta 4 solo se muestra si es persona natural
+        if (answers.quienVende !== 'persona_natural') {
+          return true; // Se salta, así que siempre tiene "respuesta"
+        }
+        return !!answers['question4'] || !!answers.declarante;
+      }
+      if (questionNumber === 7) {
+        // Verificar que haya subconcepto seleccionado
+        return !!answers['question7'] || !!answers.subconcepto;
+      }
+      if (questionNumber === 10) {
+        // Pregunta 10 solo se muestra si es Ibagué
+        if (!answers.ibague) {
+          return true; // Se salta, así que siempre tiene "respuesta"
+        }
+        return !!answers['question10'] || !!answers.ica;
+      }
+      // Para las demás preguntas, verificar si hay respuesta
+      return !!answers['question' + questionNumber];
+    }
+
+    function loadResponsabilidades(tipoPersona) {
+      const container = document.getElementById('responsabilidadesOptions');
+      container.innerHTML = '';
+
+      const responsabilidades = {
+        persona_juridica: [
+          { value: 'O-13', label: '🏢 Gran Contribuyente (empresa grande)' },
+          { value: 'O-15', label: '🔄 Autorretenedor (se retiene a sí mismo)' },
+          { value: 'O-23', label: '💰 Agente de Retención IVA (retiene IVA)' },
+          { value: 'O-47', label: '📋 Régimen Simple (empresa pequeña)' },
+          { value: 'R-99-PN', label: '❌ No responsable de retenciones' },
+          { value: 'NINGUNA', label: '🚫 Sin responsabilidad fiscal' },
+        ],
+        persona_natural: [
+          { value: 'O-47', label: '📋 Régimen Simple (persona pequeña)' },
+          { value: 'R-99-PN', label: '❌ No responsable de retenciones' },
+          { value: 'NINGUNA', label: '🚫 Sin responsabilidad fiscal' },
+        ],
+      };
+
+      (responsabilidades[tipoPersona] || []).forEach((opcion, index) => {
+        const button = document.createElement('button');
+        button.className = 'option-button';
+        button.setAttribute('data-value', opcion.value);
+        button.innerHTML = opcion.label;
+        button.style.animationDelay = `${index * 0.05 + 0.1}s`;
+        container.appendChild(button);
+      });
+    }
+
+    function loadSubconceptos(categoria) {
+      console.log('Cargando subconceptos para:', categoria);
+
+      const container = document.getElementById('subconceptoOptions');
+      if (!container) {
+        console.error('Container no encontrado');
+        return;
+      }
+
+      // Limpiar container
+      container.innerHTML = '';
+
+      // Crear opciones basadas en la categoría
+      let opciones = [];
+
+      if (categoria === 'compras') {
+        opciones = [
+          { value: 'compras_generales', label: '📦 Compras normales de productos/suministros' },
+          { value: 'compras_tarjeta', label: '💳 Compras pagadas con tarjeta' },
+          { value: 'compras_agricolas_sin_procesamiento', label: '🌾 Compras de productos agrícolas frescos' },
+          { value: 'compras_agricolas_con_procesamiento', label: '🏭 Compras de productos agrícolas procesados' },
+          { value: 'compras_cafe', label: '☕ Compras de café (pregamino o cereza)' },
+          { value: 'compras_combustibles', label: '⛽ Compras de gasolina, diésel, etc.' },
+          { value: 'compras_vehiculos', label: '🚗 Compras de carros, motos, etc.' },
+          { value: 'compras_oro', label: '🥇 Compras de oro (empresas comerciales)' },
+          { value: 'compras_vivienda_hasta_10000uvt', label: '🏠 Compra casa para vivir (hasta $498 millones)' },
+          { value: 'compras_vivienda_exceso_10000uvt', label: '🏘️ Compra casa para vivir (más de $498 millones)' },
+          { value: 'compras_bienes_raices_no_vivienda', label: '🏢 Compra terrenos/oficinas (no para vivir)' }
+        ];
+      } else if (categoria === 'servicios') {
+        opciones = [
+          { value: 'servicios_generales', label: '🛠️ Servicios varios (consultoría, mantenimiento, etc.)' },
+          { value: 'emolumentos_eclesiasticos', label: '⛪ Pagos a iglesias o entidades religiosas' },
+          { value: 'servicios_temporales', label: '👥 Servicios de personal temporal' },
+          { value: 'servicios_vigilancia_aseo', label: '🛡️ Servicios de seguridad y limpieza' },
+          { value: 'servicios_salud_ips', label: '🏥 Servicios médicos (hospitales, clínicas)' },
+          { value: 'servicios_hoteles_restaurantes', label: '🍽️ Servicios de hoteles y restaurantes' },
+          { value: 'servicios_software', label: '💻 Licencias de programas de computador' },
+          { value: 'otros_ingresos', label: '📋 Otros ingresos varios' }
+        ];
+      } else if (categoria === 'transporte') {
+        opciones = [
+          { value: 'transporte_carga', label: '🚚 Transporte de mercancías' },
+          { value: 'transporte_pasajeros_terrestre', label: '🚌 Transporte de pasajeros por carretera' },
+          { value: 'transporte_pasajeros_aereo_maritimo', label: '✈️ Transporte de pasajeros por avión/barco' }
+        ];
+      } else if (categoria === 'arrendamientos') {
+        opciones = [
+          { value: 'arrendamiento_inmuebles', label: '🏠 Arriendo de casas, oficinas, locales' },
+          { value: 'arrendamiento_muebles', label: '🪑 Arriendo de equipos, muebles, maquinaria' }
+        ];
+      } else if (categoria === 'honorarios') {
+        opciones = [
+          { value: 'honorarios_juridica', label: '🏢 Honorarios pagados a empresas' },
+          { value: 'honorarios_natural', label: '👤 Honorarios pagados a personas' }
+        ];
+      } else if (categoria === 'financieros') {
+        opciones = [
+          { value: 'intereses_financieros', label: '💰 Intereses de préstamos, inversiones' },
+          { value: 'rendimientos_renta_fija', label: '📈 Rendimientos de bonos, CDT' }
+        ];
+      } else if (categoria === 'construccion') {
+        opciones = [
+          { value: 'contratos_construccion', label: '🏗️ Contratos de construcción y urbanización' }
+        ];
+      } else if (categoria === 'otros') {
+        opciones = [
+          { value: 'otros_ingresos', label: '📋 Otros ingresos varios' },
+          { value: 'enajenacion_activos_fijos', label: '🏭 Venta de activos fijos' }
+        ];
+      } else {
+        // Opción genérica si no se encuentra la categoría
+        opciones = [
+          { value: categoria + '_general', label: `📋 ${categoria.charAt(0).toUpperCase() + categoria.slice(1)} general` }
+        ];
+      }
+
+      // Crear botones
+      opciones.forEach((opcion, index) => {
+        const button = document.createElement('button');
+        button.className = 'option-button';
+        button.setAttribute('data-value', opcion.value);
+        button.innerHTML = `<strong>${opcion.label}</strong>`;
+        button.style.animationDelay = `${index * 0.05 + 0.1}s`;
+        container.appendChild(button);
+      });
+
+      console.log(`Creados ${opciones.length} botones para ${categoria}`);
+    }
+
+
+    // Event listener completamente nuevo y simple
+    document.addEventListener('click', function (e) {
+      if (e.target.classList.contains('option-button')) {
+        // Obtener información básica
+        const questionCard = e.target.closest('.question-card');
+        const questionNumber = parseInt(questionCard.dataset.question);
+        const value = e.target.dataset.value;
+
+        // Limpiar selecciones anteriores
+        questionCard.querySelectorAll('.option-button').forEach(btn => {
+          btn.classList.remove('selected');
+          btn.style.backgroundColor = '';
+          btn.style.borderColor = '';
+        });
+
+        // Marcar como seleccionado (estilos)
+        e.target.classList.add('selected');
+        e.target.style.backgroundColor = '#e3f2fd';
+        e.target.style.borderColor = '#2196f3';
+
+        // Guardar respuesta genérica (para hasAnswer)
+        answers['question' + questionNumber] = value;
+
+        // Casos especiales - guardar en propiedades específicas para cálculos
+        if (questionNumber === 2) {
+          answers.quienVende = value;
+          loadResponsabilidades(value);
+        }
+
+        if (questionNumber === 3) {
+          answers.responsabilidades = value;
+          // Nota: answers['question' + questionNumber] ya fue guardado arriba y satisface hasAnswer(3)
+        }
+
+        if (questionNumber === 6) {
+          answers.conceptoPrincipal = value;
+          loadSubconceptos(value);
+          // Mostrar pregunta 7 si es necesario
+          const subconceptoCard = document.getElementById('subconceptoQuestion');
+          if (subconceptoCard) {
+            subconceptoCard.style.display = 'block';
+          }
+        }
+
+        if (questionNumber === 7) {
+          answers.subconcepto = value;
+        }
+
+        if (questionNumber === 8) {
+          answers.iva = value;
+        }
+
+        if (questionNumber === 9) {
+          answers.ibague = value === 'si';
+          const icaQuestion = document.getElementById('icaQuestion');
+          if (icaQuestion) {
+            icaQuestion.style.display = value === 'si' ? 'block' : 'none';
+          }
+        }
+
+        if (questionNumber === 10) {
+          answers.ica = parseFloat(value);
+        }
+
+        // Habilitar siguiente
+        nextBtn.disabled = false;
+      }
+    });
+
+
+    // Manejar input de valor con validación y sanitización
+    document.getElementById('valorOperacion').addEventListener('input', (e) => {
+      // Sanitizar: solo permitir números y punto decimal
+      let valorSanitizado = e.target.value.replace(/[^0-9.]/g, '');
+
+      // Prevenir múltiples puntos decimales
+      const partes = valorSanitizado.split('.');
+      if (partes.length > 2) {
+        valorSanitizado = partes[0] + '.' + partes.slice(1).join('');
+      }
+
+      // Actualizar el input si fue modificado
+      if (valorSanitizado !== e.target.value) {
+        e.target.value = valorSanitizado;
+      }
+
+      // Parsear y validar
+      const valor = parseFloat(valorSanitizado);
+
+      // Validación de rango (máximo 999 billones de pesos colombianos)
+      if (valor > 999999999999999) {
+        e.target.value = '999999999999999';
+        answers.valor = 999999999999999;
+      } else if (valor < 0) {
+        e.target.value = '0';
+        answers.valor = 0;
+      } else {
+        answers.valor = valor || 0;
+      }
+
+      nextBtn.disabled = !hasAnswer(5);
+    });
+
+    // Función para obtener la siguiente pregunta válida
+    function getNextValidQuestion(currentQ) {
+      let nextQ = currentQ + 1;
+
+      // Si ya pasamos la última pregunta, retornar null
+      if (nextQ > totalQuestions) {
+        return null;
+      }
+
+      // Saltar pregunta 4 si no es persona natural
+      if (nextQ === 4 && answers.quienVende !== 'persona_natural') {
+        nextQ = 5;
+      }
+
+      // La pregunta 7 debe mostrarse si hay concepto principal
+      // Si llegamos a la pregunta 7 sin concepto principal, hay un problema
+      if (nextQ === 7 && !answers.conceptoPrincipal) {
+        // Si no hay concepto principal, no deberíamos llegar aquí, pero por seguridad volvemos a 6
+        return 6;
+      }
+
+      // Saltar pregunta 10 si no es Ibagué
+      if (nextQ === 10 && !answers.ibague) {
+        return null; // No hay más preguntas
+      }
+
+      // Asegurar que no se pase de la última pregunta
+      if (nextQ > totalQuestions) {
+        return null;
+      }
+
+      return nextQ;
+    }
+
+    // Función para obtener la pregunta anterior válida
+    function getPrevValidQuestion(currentQ) {
+      let prevQ = currentQ - 1;
+
+      // Saltar pregunta 10 si no es Ibagué
+      if (prevQ === 10 && !answers.ibague) {
+        prevQ = 9;
+      }
+
+      // NO saltar pregunta 7 - siempre debe mostrarse
+
+      // Saltar pregunta 4 si no es persona natural
+      if (prevQ === 4 && answers.quienVende !== 'persona_natural') {
+        prevQ = 3;
+      }
+
+      return prevQ;
+    }
+
+    // Botones de navegación
+    prevBtn.addEventListener('click', () => {
+      if (currentQuestion > 1) {
+        currentQuestion = getPrevValidQuestion(currentQuestion);
+        showQuestion(currentQuestion);
+      }
+    });
+
+    nextBtn.addEventListener('click', () => {
+      const nextQuestion = getNextValidQuestion(currentQuestion);
+      if (nextQuestion) {
+        currentQuestion = nextQuestion;
+        showQuestion(currentQuestion);
+      } else {
+        // Calcular resultados
+        calcularResultados();
+      }
+    });
+
+    function calcularResultados() {
+      // =====================================================
+      // VALIDACIONES DE ENTRADA
+      // =====================================================
+
+      // Validar que existan todas las respuestas necesarias
+      if (!answers.valor || answers.valor <= 0) {
+        alert('⚠️ Error: El valor de la operación debe ser mayor a $0');
+        return;
+      }
+
+      if (!answers.subconcepto) {
+        alert('⚠️ Error: Debe seleccionar un concepto de retención');
+        return;
+      }
+
+      if (!answers.responsabilidades) {
+        alert('⚠️ Error: Debe seleccionar las responsabilidades fiscales del vendedor');
+        return;
+      }
+
+      // =====================================================
+      // EXTRACCIÓN SEGURA DE DATOS
+      // =====================================================
+
+      const valorBase = parseFloat(answers.valor) || 0;
+      const tarifaIVA = answers.iva === 'exento' || answers.iva === 'excluido' ? 0 : parseFloat(answers.iva) || 0;
+      const valorIVA = valorBase * tarifaIVA;
+      const valorTotalConIVA = valorBase + valorIVA;
+
+      const esIbagué = answers.ibague === true;
+      const tarifaICA = parseFloat(answers.ica) || 0;
+      const esNoDeclarante = answers.declarante === 'no_declarante';
+      const concepto = String(answers.subconcepto).trim();
+      const esRegimenSimple = answers.responsabilidades === 'O-47';
+
+      if (!concepto || !tablaRetencion[concepto]) {
+        alert('Error: No se pudo determinar el concepto de retención.');
+        return;
+      }
+
+      let reteIVA = 0;
+      // NOTA: La calculadora asume que el COMPRADOR es agente de retención IVA.
+      // Solo se aplica ReteIVA si el vendedor cobra IVA y NO es Gran Contribuyente.
+      const vendedorEsGC = answers.responsabilidades === 'O-13';
+
+      if (tarifaIVA > 0 && !vendedorEsGC) {
+        // Retención de IVA en servicios (base mínima $100,000)
+        if (['servicios_generales', 'emolumentos_eclesiasticos', 'servicios_temporales',
+          'servicios_vigilancia_aseo', 'servicios_salud_ips', 'servicios_hoteles_restaurantes',
+          'servicios_software', 'transporte_carga', 'transporte_pasajeros_aereo_maritimo',
+          'arrendamiento_muebles', 'contratos_construccion'].includes(concepto)) {
+          if (valorBase >= 100000) {
+            reteIVA = valorIVA * 0.15;
+          }
+        }
+        // Retención de IVA en compras (base mínima $498,000)
+        else if (['compras_generales', 'compras_tarjeta', 'compras_agricolas_sin_procesamiento',
+          'compras_agricolas_con_procesamiento', 'compras_cafe', 'compras_combustibles',
+          'compras_vehiculos', 'compras_oro', 'compras_vivienda_hasta_10000uvt',
+          'compras_vivienda_exceso_10000uvt', 'compras_bienes_raices_no_vivienda',
+          'arrendamiento_inmuebles', 'otros_ingresos', 'enajenacion_activos_fijos'].includes(concepto)) {
+          if (valorBase >= 498000) {
+            reteIVA = valorIVA * 0.15;
+          }
+        }
+      }
+
+      // Definir variables de exclusión
+      const esGranContribuyente = answers.responsabilidades === 'O-13';
+      const esAutorretenedor = answers.responsabilidades === 'O-15';
+
+      let retefuente = 0;
+      let tarifaAplicada = 0;
+      const datosRetencion = tablaRetencion[concepto];
+
+      // Aplicar retención SOLO si el vendedor NO es:
+      // - Régimen Simple (O-47)
+      // - Gran Contribuyente (O-13)
+      // - Autorretenedor (O-15)
+      if (!esRegimenSimple && !esGranContribuyente && !esAutorretenedor) {
+        if (datosRetencion?.tarifa !== undefined) {
+          // Conceptos con tarifa única
+          if (valorBase >= datosRetencion.base) {
+            retefuente = valorBase * datosRetencion.tarifa;
+            tarifaAplicada = datosRetencion.tarifa;
+          }
+        } else if (datosRetencion?.declarante && datosRetencion?.no_declarante) {
+          // Conceptos que dependen de si es declarante o no
+          const tipo = esNoDeclarante ? 'no_declarante' : 'declarante';
+          const datos = datosRetencion[tipo];
+          if (datos && valorBase >= datos.base) {
+            retefuente = valorBase * datos.tarifa;
+            tarifaAplicada = datos.tarifa;
+          }
+        }
+      }
+
+      // =====================================================
+      // CÁLCULO DE ICA (CORRECCIÓN CRÍTICA)
+      // =====================================================
+      // IMPORTANTE: El Régimen Simple NO paga ICA municipal porque ya está
+      // incluido en la tarifa única del régimen simple tributario.
+      // Ref: Art. 903 del Estatuto Tributario (Ley 1819 de 2016)
+
+      let ica = 0;
+      if (esIbagué && !esRegimenSimple) {
+        ica = valorBase * (tarifaICA / 1000);
+
+        // Validación: asegurar que ICA no sea negativo o NaN
+        if (isNaN(ica) || ica < 0) {
+          ica = 0;
+        }
+      }
+      const totalRetenciones = retefuente + reteIVA + ica;
+      const valorNeto = valorTotalConIVA - totalRetenciones;
+
+      // =====================================================
+      // NOTAS INFORMATIVAS
+      // =====================================================
+
+      const notaRegimenSimple = esRegimenSimple
+        ? '<p class="valor-suave">📋 <strong>Nota Régimen Simple:</strong> El vendedor es Régimen Simple (O-47). No se aplica Retefuente ni ICA (incluidos en tarifa única del régimen).</p>'
+        : '';
+
+      const notaGranContribuyente = esGranContribuyente
+        ? '<p class="valor-suave">🏢 <strong>Nota Gran Contribuyente:</strong> El vendedor es Gran Contribuyente (O-13). No se aplica Retefuente ni ReteIVA.</p>'
+        : '';
+
+      const notaAutorretenedor = esAutorretenedor
+        ? '<p class="valor-suave">🔄 <strong>Nota Autorretenedor:</strong> El vendedor es Autorretenedor (O-15). No se aplica Retefuente porque se autoretiene.</p>'
+        : '';
+
+      // =====================================================
+      // RENDERIZADO SEGURO DE RESULTADOS
+      // =====================================================
+
+      // Validación final: asegurar que no haya NaN en los cálculos
+      const validarNumero = (num) => isNaN(num) || !isFinite(num) ? 0 : num;
+
+      const valorBaseSafe = validarNumero(valorBase);
+      const valorIVASafe = validarNumero(valorIVA);
+      const retefuenteSafe = validarNumero(retefuente);
+      const reteIVASafe = validarNumero(reteIVA);
+      const icaSafe = validarNumero(ica);
+      const totalRetencionesSafe = validarNumero(totalRetenciones);
+      const valorNetoSafe = validarNumero(valorNeto);
+
+      resultado.innerHTML = `
+        <hr style="margin: 15px 0; border: 1px solid #eee;">
+        <p class="valor-suave"><strong>💰 Valor base:</strong> $${valorBaseSafe.toLocaleString('es-CO', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</p>
+        <p class="valor-suave"><strong>💸 IVA (${(tarifaIVA * 100).toFixed(0)}%):</strong> $${valorIVASafe.toLocaleString('es-CO', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</p>
+        <hr style="margin: 10px 0; border: 1px solid #eee;">
+        <p class="valor-suave"><strong>📋 Retefuente (${(tarifaAplicada * 100).toFixed(1)}%):</strong> $${retefuenteSafe.toLocaleString('es-CO', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</p>
+        <p class="valor-suave"><strong>💸 ReteIVA (15% sobre IVA):</strong> $${reteIVASafe.toLocaleString('es-CO', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</p>
+        <p class="valor-suave"><strong>🏛️ ICA Ibagué (${tarifaICA.toFixed(2)}‰):</strong> $${icaSafe.toLocaleString('es-CO', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</p>
+        ${notaRegimenSimple}
+        ${notaGranContribuyente}
+        ${notaAutorretenedor}
+        <hr style="margin: 15px 0; border: 2px solid #007bff;">
+        <p class="valor-grande">💸 <strong>Total Retenciones:</strong> $${Math.round(totalRetencionesSafe).toLocaleString('es-CO')}</p>
+        <p class="valor-grande">✅ <strong>Valor neto a pagar:</strong> $${Math.round(valorNetoSafe).toLocaleString('es-CO')}</p>
+      `;
+      resultado.style.display = 'block';
+      // Forzar reflow para activar la animación
+      resultado.offsetHeight;
+      resultado.style.animation = 'none';
+      setTimeout(() => {
+        resultado.style.animation = 'resultFadeIn 0.6s ease-out';
+      }, 10);
+    }
+
+    // Inicializar
+    document.addEventListener('DOMContentLoaded', () => {
+      showQuestion(1);
+    });
+  </script>
+</body>
+
+</html>

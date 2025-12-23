@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Calculadora de Retención e ICA | Réplica</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Host+Grotesk:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+  <main class="calc-container">
+    <header>
+      <div class="header-top">
+        <h1>Calculadora de retención en la fuente e ICA</h1>
+        <button id="open-info" class="info-btn">💡 Recomendaciones</button>
+      </div>
+      <p class="instruction">Digita el precio de compra o venta en el campo inferior y nosotros calculamos el valor por
+        ti.</p>
+    </header>
+
+    <!-- Modal Informatico -->
+    <div id="info-modal" class="modal-overlay hidden">
+      <div class="modal-content">
+        <h2>Recomendaciones antes de aplicar retenciones</h2>
+        <div class="modal-body">
+          <ul>
+            <li><strong>Revisa el RUT del proveedor o cliente:</strong> Verifica si es gran contribuyente,
+              autorretenedor, régimen o si tiene exenciones. Esto define si debes aplicar retención.</li>
+            <li><strong>Ten en cuenta los montos mínimos:</strong> Algunas retenciones solo aplican si el valor supera
+              cierto umbral.</li>
+            <li><strong>Confirma si la operación genera retención:</strong> No todas las compras o servicios aplican.
+              Algunas actividades están exentas.</li>
+            <li><strong>Considera la ciudad para calcular ICA:</strong> El porcentaje de ICA cambia según la ciudad y la
+              actividad económica.</li>
+            <li><strong>Conserva los soportes:</strong> Guarda RUT, certificados y facturas para efectos contables y
+              tributarios.</li>
+          </ul>
+          <div class="modal-tip">
+            <p><strong>Tip:</strong> Aplicar correctamente las retenciones mejora la reputación de tu negocio y evita
+              conflictos por descuentos indebidos.</p>
+          </div>
+        </div>
+        <p class="modal-footer">Haz clic en cualquier parte para cerrar</p>
+      </div>
+    </div>
+
+    <div class="calc-content">
+      <div class="calculator-form">
+        <div class="input-group">
+          <label for="price">Valor base de la operación (Sin IVA)</label>
+          <input type="number" id="price" placeholder="Ej: 1.000.000" min="0">
+        </div>
+
+        <!-- Acuerdo: Configuración del Comprador -->
+        <div class="accordion">
+          <button type="button" class="accordion-header" id="buyer-toggle">
+            <span class="accordion-title">👤 Configuración del Comprador</span>
+            <span class="accordion-icon">▼</span>
+          </button>
+          <div class="accordion-content" id="buyer-content">
+            <div class="inner-input-group">
+              <label>Tipo de Persona</label>
+              <div class="radio-group">
+                <label class="radio-item">
+                  <input type="radio" name="buyer-type" value="juridica" checked>
+                  <span class="radio-label">Persona Jurídica</span>
+                </label>
+                <label class="radio-item">
+                  <input type="radio" name="buyer-type" value="natural">
+                  <span class="radio-label">Persona Natural</span>
+                </label>
+              </div>
+            </div>
+            <div class="inner-input-group">
+              <label for="buyer-regime">Régimen Fiscal</label>
+              <select id="buyer-regime">
+                <option value="ordinario">Común / Ordinario</option>
+                <option value="gran_contribuyente">Gran Contribuyente (O-13)</option>
+                <option value="autorretenedor">Autorretenedor (O-15)</option>
+                <option value="regimen_simple">Régimen Simple (O-47)</option>
+              </select>
+            </div>
+            <div class="inner-input-group">
+              <div class="switch-group" style="padding: 0; margin-bottom: 10px;">
+                <span class="switch-label" style="font-weight: 500; font-size: 0.9rem;">¿Es agente de retención de
+                  IVA?</span>
+                <label class="switch">
+                  <input type="checkbox" id="is-reteiva-agent">
+                  <span class="slider"></span>
+                </label>
+              </div>
+            </div>
+            <div id="reteiva-rate-group" class="inner-input-group hidden">
+              <label for="reteiva-rate">Tarifa de ReteIVA</label>
+              <select id="reteiva-rate">
+                <option value="15">15% (General)</option>
+                <option value="100">100% (Entidades Estatales / Otros)</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <!-- Acuerdo: Configuración del Vendedor -->
+        <div class="accordion">
+          <button type="button" class="accordion-header" id="seller-toggle">
+            <span class="accordion-title">👤 Configuración del Vendedor</span>
+            <span class="accordion-icon">▼</span>
+          </button>
+          <div class="accordion-content active" id="seller-content">
+            <div class="inner-input-group">
+              <label>Tipo de Persona</label>
+              <div class="radio-group">
+                <label class="radio-item">
+                  <input type="radio" name="seller-type" value="juridica" checked>
+                  <span class="radio-label">Persona Jurídica</span>
+                </label>
+                <label class="radio-item">
+                  <input type="radio" name="seller-type" value="natural">
+                  <span class="radio-label">Persona Natural</span>
+                </label>
+              </div>
+            </div>
+            <div class="inner-input-group">
+              <label for="seller-regime">Régimen Fiscal</label>
+              <select id="seller-regime">
+                <option value="ordinario">Común / Ordinario</option>
+                <option value="declarante">Persona Natural Declarante</option>
+                <option value="no_declarante">Persona Natural No Declarante</option>
+                <option value="gran_contribuyente">Gran Contribuyente (O-13)</option>
+                <option value="autorretenedor">Autorretenedor (O-15)</option>
+                <option value="regimen_simple">Régimen Simple (O-47)</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <div class="input-group">
+          <label for="concept">Concepto de operación</label>
+          <select id="concept">
+            <optgroup label="🛒 Compras">
+              <option value="compras_generales">Compras generales (declarantes)</option>
+              <option value="compras_tarjeta">Compras con tarjeta débito/crédito</option>
+              <option value="compras_agricolas_sin_procesamiento">Productos agrícolas o pecuarios sin procesamiento
+              </option>
+              <option value="compras_agricolas_con_procesamiento">Productos agrícolas o pecuarios con procesamiento
+              </option>
+              <option value="compras_cafe">Café pergamino o cereza</option>
+              <option value="compras_combustibles">Combustibles derivados del petróleo</option>
+              <option value="compras_vehiculos">Vehículos</option>
+            </optgroup>
+            <optgroup label="🛠️ Servicios">
+              <option value="servicios_generales">Servicios generales</option>
+              <option value="servicios_vigilancia_aseo">Servicios de aseo y vigilancia</option>
+              <option value="servicios_temporales">Servicios temporales de empleo</option>
+              <option value="servicios_hoteles_restaurantes">Servicios de hoteles y restaurantes</option>
+            </optgroup>
+            <optgroup label="🏠 Arrendamientos">
+              <option value="arrendamiento_inmuebles">Arrendamiento de bienes inmuebles</option>
+              <option value="arrendamiento_muebles">Arrendamiento de bienes muebles</option>
+            </optgroup>
+            <optgroup label="💼 Honorarios y Comisiones">
+              <option value="honorarios_juridica">Honorarios y comisiones (Personas Jurídicas)</option>
+              <option value="honorarios_natural">Honorarios y comisiones (Personas Naturales)</option>
+            </optgroup>
+            <optgroup label="🚚 Transporte">
+              <option value="transporte_carga">Transporte de carga</option>
+              <option value="transporte_pasajeros_terrestre">Transporte nacional de pasajeros (terrestre)</option>
+            </optgroup>
+            <optgroup label="💰 Financieros">
+              <option value="rendimientos_financieros">Rendimientos financieros</option>
+            </optgroup>
+            <optgroup label="🏗️ Construcción">
+              <option value="contratos_construccion">Contratos de construcción y urbanización</option>
+            </optgroup>
+            <optgroup label="📊 Otros Ingresos">
+              <option value="otros_ingresos">Otros ingresos tributarios</option>
+            </optgroup>
+          </select>
+        </div>
+
+        <div class="switch-group">
+          <span class="switch-label">¿Tiene IVA incluido?</span>
+          <label class="switch">
+            <input type="checkbox" id="has-iva" checked>
+            <span class="slider"></span>
+          </label>
+        </div>
+
+        <div id="iva-select-group" class="input-group">
+          <label for="iva-rate">% de IVA</label>
+          <select id="iva-rate">
+            <option value="19">IVA 19%</option>
+            <option value="5">IVA 5%</option>
+            <option value="0">Sin IVA (0%)</option>
+          </select>
+        </div>
+
+        <div class="switch-group">
+          <span class="switch-label">¿Aplica ICA?</span>
+          <label class="switch">
+            <input type="checkbox" id="apply-ica">
+            <span class="slider"></span>
+          </label>
+        </div>
+
+        <div id="ica-input-group" class="input-group hidden">
+          <label for="ica-rate">% de retención de ICA</label>
+          <input type="number" id="ica-rate" placeholder="Ej: 11.04" step="0.01">
+        </div>
+      </div>
+
+      <div class="results-grid">
+        <div class="result-card">
+          <div class="result-label">Base retención</div>
+          <div class="result-value" id="res-base">$0</div>
+        </div>
+        <div class="result-card" id="card-iva">
+          <div class="result-label">Valor IVA</div>
+          <div class="result-value" id="res-iva">$0</div>
+        </div>
+        <div class="result-card hidden" id="card-auto">
+          <div class="result-label">
+            Autorretención (Compra RST)
+          </div>
+          <div class="result-value" id="res-auto">$0</div>
+        </div>
+        <div class="result-card" id="card-rete">
+          <div class="result-label">
+            Retención fuente <span class="percentage-badge" id="badge-rete">2.5%</span>
+          </div>
+          <div class="result-value" id="res-rete">$0</div>
+        </div>
+        <div class="result-card" id="card-reteiva">
+          <div class="result-label">
+            Retención IVA <span class="percentage-badge" id="badge-reteiva">15% s/IVA</span>
+          </div>
+          <div class="result-value" id="res-reteiva">$0</div>
+        </div>
+        <div class="result-card" id="card-ica">
+          <div class="result-label">
+            Retención ICA <span class="percentage-badge hidden" id="badge-ica">0%</span>
+          </div>
+          <div class="result-value" id="res-ica">$0</div>
+        </div>
+        <div class="result-card full-width final-total">
+          <div class="result-label">Valor final a pagar</div>
+          <div class="result-value" id="res-total">$0</div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+
+</html>
