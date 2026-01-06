@@ -1,27 +1,49 @@
 document.addEventListener('DOMContentLoaded', () => {
-    // Data from AUXILIAR IBAGUE.html
-    const tablaRetencion = {
-        compras_generales: { declarante: { base: 498000, tarifa: 0.025 }, no_declarante: { base: 498000, tarifa: 0.035 } },
-        compras_tarjeta: { base: 0, tarifa: 0.015 },
-        compras_agricolas_sin_procesamiento: { base: 3486000, tarifa: 0.015 },
-        compras_agricolas_con_procesamiento: { declarante: { base: 498000, tarifa: 0.025 }, no_declarante: { base: 498000, tarifa: 0.035 } },
-        compras_cafe: { base: 3486000, tarifa: 0.005 },
-        compras_combustibles: { base: 0, tarifa: 0.001 },
-        compras_vehiculos: { base: 0, tarifa: 0.01 },
-        servicios_generales: { declarante: { base: 100000, tarifa: 0.04 }, no_declarante: { base: 100000, tarifa: 0.06 } },
-        transporte_carga: { base: 100000, tarifa: 0.01 },
-        transporte_pasajeros_terrestre: { declarante: { base: 498000, tarifa: 0.035 }, no_declarante: { base: 498000, tarifa: 0.035 } },
-        servicios_temporales: { base: 100000, tarifa: 0.01 },
-        servicios_vigilancia_aseo: { base: 100000, tarifa: 0.02 },
-        servicios_hoteles_restaurantes: { declarante: { base: 100000, tarifa: 0.035 }, no_declarante: { base: 100000, tarifa: 0.035 } },
-        arrendamiento_inmuebles: { declarante: { base: 498000, tarifa: 0.035 }, no_declarante: { base: 498000, tarifa: 0.035 } },
-        arrendamiento_muebles: { base: 0, tarifa: 0.04 },
-        honorarios_juridica: { base: 0, tarifa: 0.11 },
-        honorarios_natural: { declarante: { base: 0, tarifa: 0.11 }, no_declarante: { base: 0, tarifa: 0.10 } },
-        contratos_construccion: { base: 498000, tarifa: 0.02 },
-        rendimientos_financieros: { base: 0, tarifa: 0.07 },
-        otros_ingresos: { declarante: { base: 498000, tarifa: 0.025 }, no_declarante: { base: 498000, tarifa: 0.035 } }
+    // UVT Configuration
+    const UVT_VALUES = {
+        2025: 49799,
+        2026: 52374
     };
+
+    // Get current UVT value based on selected year
+    function getCurrentUVT() {
+        const yearSelect = document.getElementById('uvt-year');
+        const selectedYear = yearSelect ? parseInt(yearSelect.value) : 2026;
+        return UVT_VALUES[selectedYear] || UVT_VALUES[2026];
+    }
+
+    // Calculate retention bases dynamically based on UVT
+    // Uses commercial rounding (to nearest thousand) for practical business use
+    function getTablaRetencion() {
+        const UVT = getCurrentUVT();
+        // Round to nearest thousand for commercial use
+        const UVT_10 = Math.round((UVT * 10) / 1000) * 1000;  // 524.000 (2026) or 498.000 (2025)
+        const UVT_2 = Math.round((UVT * 2) / 1000) * 1000;     // 105.000 (2026) or 100.000 (2025)
+        const UVT_70 = Math.round((UVT * 70) / 1000) * 1000;   // 3.666.000 (2026) or 3.486.000 (2025)
+
+        return {
+            compras_generales: { declarante: { base: UVT_10, tarifa: 0.025 }, no_declarante: { base: UVT_10, tarifa: 0.035 } },
+            compras_tarjeta: { base: 0, tarifa: 0.015 },
+            compras_agricolas_sin_procesamiento: { base: UVT_70, tarifa: 0.015 },
+            compras_agricolas_con_procesamiento: { declarante: { base: UVT_10, tarifa: 0.025 }, no_declarante: { base: UVT_10, tarifa: 0.035 } },
+            compras_cafe: { base: UVT_70, tarifa: 0.005 },
+            compras_combustibles: { base: 0, tarifa: 0.001 },
+            compras_vehiculos: { base: 0, tarifa: 0.01 },
+            servicios_generales: { declarante: { base: UVT_2, tarifa: 0.04 }, no_declarante: { base: UVT_2, tarifa: 0.06 } },
+            transporte_carga: { base: UVT_2, tarifa: 0.01 },
+            transporte_pasajeros_terrestre: { declarante: { base: UVT_10, tarifa: 0.035 }, no_declarante: { base: UVT_10, tarifa: 0.035 } },
+            servicios_temporales: { base: UVT_2, tarifa: 0.01 },
+            servicios_vigilancia_aseo: { base: UVT_2, tarifa: 0.02 },
+            servicios_hoteles_restaurantes: { declarante: { base: UVT_2, tarifa: 0.035 }, no_declarante: { base: UVT_2, tarifa: 0.035 } },
+            arrendamiento_inmuebles: { declarante: { base: UVT_10, tarifa: 0.035 }, no_declarante: { base: UVT_10, tarifa: 0.035 } },
+            arrendamiento_muebles: { base: 0, tarifa: 0.04 },
+            honorarios_juridica: { base: 0, tarifa: 0.11 },
+            honorarios_natural: { declarante: { base: 0, tarifa: 0.11 }, no_declarante: { base: 0, tarifa: 0.10 } },
+            contratos_construccion: { base: UVT_10, tarifa: 0.02 },
+            rendimientos_financieros: { base: 0, tarifa: 0.07 },
+            otros_ingresos: { declarante: { base: UVT_10, tarifa: 0.025 }, no_declarante: { base: UVT_10, tarifa: 0.035 } }
+        };
+    }
 
     const conceptsConReteIvaServicios = ['servicios_generales', 'servicios_temporales', 'servicios_vigilancia_aseo', 'servicios_hoteles_restaurantes', 'contratos_construccion'];
 
@@ -126,6 +148,7 @@ document.addEventListener('DOMContentLoaded', () => {
         let reteAmount = 0;
         let autoReteAmount = 0;
         let retePerc = 0;
+        const tablaRetencion = getTablaRetencion();
         const data = tablaRetencion[conceptKey];
 
         // Rules: No Retefuente subtraction if:
@@ -245,6 +268,7 @@ document.addEventListener('DOMContentLoaded', () => {
     [
         buyerRegimeSelect, sellerRegimeSelect,
         document.getElementById('concept'),
+        document.getElementById('uvt-year'),
         ivaRateSelect, icaRateInput,
         isReteIvaAgentCheck, reteIvaRateSelect
     ].forEach(el => el.addEventListener('change', calculate));
