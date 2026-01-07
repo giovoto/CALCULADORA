@@ -190,8 +190,13 @@ document.addEventListener('DOMContentLoaded', () => {
                 // Strictly manual calculation
                 reteIvaAmount = Math.round(ivaAmount * manualRate);
                 reteIvaPerc = manualRate * 100;
+            } else if (sellerIsSimple && buyerIsPJ) {
+                // Automatic ReteIVA for Regimen Simple Seller (when Buyer is PJ)
+                // Default to 15% "de manera interna"
+                const autoRate = 0.15;
+                reteIvaAmount = Math.round(ivaAmount * autoRate);
+                reteIvaPerc = autoRate * 100;
             }
-            // All automatic logic removed as per user request
         }
 
         // 5. ICA Calculation
@@ -209,7 +214,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Update UI Visibility
         cardIva.classList.toggle('hidden', ivaAmount === 0);
+
         cardAuto.classList.toggle('hidden', autoReteAmount === 0);
+        // Style 'Autorretención' as inactive/informative only
+        if (autoReteAmount > 0) {
+            cardAuto.classList.add('inactive-result');
+        } else {
+            cardAuto.classList.remove('inactive-result');
+        }
+
         cardRete.classList.toggle('hidden', reteAmount === 0);
         cardReteIva.classList.toggle('hidden', reteIvaAmount === 0);
         cardIca.classList.toggle('hidden', icaAmount === 0);
